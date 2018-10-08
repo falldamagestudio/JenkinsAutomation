@@ -1,0 +1,16 @@
+<slave>
+  <description>-- Will be replaced with $NodeName --</description>
+  <remoteFS>C:\Jenkins</remoteFS>
+  <numExecutors>1</numExecutors>
+  <mode>EXCLUSIVE</mode>
+  <retentionStrategy class="hudson.slaves.RetentionStrategy$Always"/>
+  <launcher class="hudson.slaves.JNLPLauncher">
+    <workDirSettings>
+      <disabled>false</disabled>
+      <internalDir>remoting</internalDir>
+      <failIfWorkDirIsMissing>false</failIfWorkDirIsMissing>
+    </workDirSettings>
+  </launcher>
+  <label>-- Will be replaced with $NodeName --</label>
+  <nodeProperties/>
+</slave>

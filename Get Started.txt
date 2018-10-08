@@ -1,0 +1,90 @@
+Create new host in Google Cloud:
+
+$hostName = "unity-windows-slave-2"
+
+. .\GoogleCloud\New-GoogleCloudHost.ps1
+New-GoogleCloudHost -Name $hostName -MemorySizeMB 9216 -DiskSizeGB 200
+
+. .\GoogleCloud\New-GoogleCloudHost-User.ps1
+New-GoogleCloudHost-User -HostName $hostName -UserName "Jenkins"
+	... yep
+	... repeat if instance wasn't ready
+	... write down password
+
+============================================================================================
+
+Install software on host:
+
+$jenkinsMasterUser = <...>
+$jenkinsMasterAPIToken = <...>
+$jenkinsMasterUrl = "http://jenkins.falldamagestudio.com:8080/"
+	
+$hostName = "unity-windows-slave-2"
+
+$targetIp = (Get-GceInstance $hostName).NetworkInterfaces[0].AccessConfigs[0].NatIP
+
+$credential = Get-Credential
+	... type in Jenkins username, password
+
+. .\Helpers\Enable-Tls12.ps1
+Enable-Tls12
+
+. .\GoogleCloud\New-PSSession-GoogleCloudHost.ps1
+$targetSession = New-PSSession-GoogleCloudHost -TargetIp $targetIp -Credential $credential
+
+. .\Helpers\Install-HelperPackages.ps1
+Install-HelperPackages -TargetSession $targetSession
+
+. .\Java\Install-Java.ps1
+Install-Java -TargetSession $targetSession
+
+. .\NetFramework-3_5\Install-NetFramework-3_5.ps1
+Install-NetFramework-3_5 -TargetSession $targetSession
+
+. .\Plastic\Install-Plastic.ps1
+Install-Plastic -TargetSession $targetSession -Version "7.0.16.2562"
+
+. .\SteamCMD\Install-SteamCMD.ps1
+Install-SteamCMD -TargetSession $targetSession
+
+. .\Unity\Install-Unity.ps1
+Install-Unity -TargetSession $targetSession -Version "2018.2.5f1" -Components "Windows64-editor"
+
+. .\JenkinsAgent\Install-JenkinsSlave.ps1 
+Install-JenkinsSlave -TargetSession $targetSession -JenkinsMasterUrl $jenkinsMasterUrl
+
+====================================================
+
+Activate software on host:
+
+. .\JenkinsAgent\Activate-JenkinsSlave.ps1 
+Activate-JenkinsSlave -TargetSession $targetSession -JenkinsMasterUrl $jenkinsMasterUrl -NodeName $hostName -Credential $credential -JenkinsMasterUser $jenkinsMasterUser -JenkinsMasterAPIToken $jenkinsMasterAPIToken
+
+$plasticCredential = Get-Credential
+$plasticServer = <...>
+$plasticContentEncryptionPassword = <...>
+
+. .\Plastic\Activate-Plastic.ps1
+Activate-Plastic -TargetSession $targetSession -PlasticCredential $plasticCredential -PlasticServer $plasticServer -PlasticCloudContentEncryptionPassword $plasticContentEncryptionPassword
+
+$unityCredential = Get-Credential
+$unitySerial = <...>
+
+. .\Unity\Activate-Unity.ps1
+Activate-Unity -TargetSession $targetSession -UnityCredential $unityCredential -Serial $unitySerial
+
+=============================================================================================
+
+Remove Jenkins node from master:
+
+. .\JenkinsAgent\Uninstall-JenkinsSlave.ps1
+Uninstall-JenkinsSlave -TargetSession $targetSession -JenkinsMasterUrl $jenkinsMasterUrl -NodeName $hostName -Credential $credential -JenkinsMasterUser $jenkinsMasterUser -JenkinsMasterAPIToken $jenkinsMasterAPIToken
+
+=============================================================================================
+
+Return host to Google Cloud:
+
+$hostName = "unity-windows-slave-2"
+
+. .\GoogleCloud\Remove-GoogleCloudHost.ps1
+Remove-GoogleCloudHost -Name $hostName
