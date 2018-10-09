@@ -5,7 +5,6 @@ function Uninstall-JenkinsSlave {
 		[Parameter(Mandatory=$true)][System.Management.Automation.Runspaces.PSSession]$TargetSession,
 		[Parameter(Mandatory=$true)][string]$JenkinsMasterUrl,
 		[Parameter(Mandatory=$true)][string]$NodeName,
-		[Parameter(Mandatory=$true)][System.Management.Automation.PSCredential]$Credential,
 		[Parameter(Mandatory=$true)][string]$JenkinsMasterUser,
 		[Parameter(Mandatory=$true)][string]$JenkinsMasterAPIToken
 	)
