@@ -141,6 +141,10 @@ Activate-Unity -TargetSession $targetSession -UnityCredential $unityCredential -
 
 . .\JenkinsAgent\Activate-JenkinsSlave.ps1 
 Activate-JenkinsSlave -TargetSession $targetSession -JenkinsMasterUrl $jenkinsMasterUrl -NodeName $hostName -Credential $machineCredential -JenkinsMasterUser $jenkinsMasterUser -JenkinsMasterAPIToken $jenkinsMasterAPIToken
+
+TODO: implement scripted activation of Steam Guard -- for now, do it manually:
+log onto the machine and perform "steamcmd.exe +login <username> <password>". This will trigger a Steam Guard check.
+Fetch the Steam Guard code from the appropriate place (Steam Authenticator or email) and enter it.
 ```
 
 The Jenkins agent will now be registered with the Jenkins master and ready to take build jobs. It will have a single label, equivalent to `$hostName`.
