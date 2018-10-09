@@ -6,7 +6,7 @@ A machine is managed as a triplet of resources: A public IP address, a persisten
 
 Unity needs 8-9GB RAM to build our current game. Most of the build process runs single-threaded; therefore we give it only 2 CPUs. The disk is of SSD type; we haven't measured but hopefully it helps processing times.
 
-## Specific scripts
+## Script index
 
 [New-GoogleCloudHost](New-GoogleCloudHost.ps1) rents and configures a new machine.
 
