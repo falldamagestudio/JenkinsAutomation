@@ -21,7 +21,10 @@ The remaining scripts perform installation/activation of various bits of softwar
 All these scripts take a `-TargetSession` parameter -- a PowerShell remote session. All configuration is done via this PowerShell session.
 Most scripts will fetch installers from the Internet directly to the target machine, and then invoke those installers.
 
-Many scripts come in `Install-` and `Activate-`-flavors. The `Install-` steps download installers and execute them, but does not leave any sensitive or instance-specific information on the machine. When all `Install-`-scripts have been run, you can take a snapshot of the machine's hard drive. This snapshot is suitable as a base image if you are going to spin up many identical Jenkins agent machines.
+Many scripts come in `Install-` and `Activate-`-flavors. The `Install-` steps download installers and execute them, but do not leave any sensitive or instance-specific information on the machine.
+When all `Install-`-scripts have been run, you can take a snapshot of the machine's hard drive.
+This snapshot is suitable as a base image if you are going to spin up many identical Jenkins agent machines.
+You will need to run the `Activate-` steps separately on each machine afterward.
 
 ## Before you start
 
@@ -51,6 +54,8 @@ New-GoogleCloudHost-User -HostName $hostName -UserName "Jenkins"
 ```
 
 ## Install software onto the machine
+
+Ensure that it is possible to reach the target machine via Windows Remote Management (WinRM). This is run on TCP port 5986. For Google Cloud, [you may need to add a new firewall rule](https://cloud.google.com/compute/docs/instances/connecting-to-instance).
 
 Open PowerShell on your computer.
 ```
