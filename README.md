@@ -122,6 +122,8 @@ $plasticCredential = Get-Credential
 $plasticServer = "<server:port for your Plastic server, or your Plastic Cloud organization"   # for example: "MyCompany@cloud"
 $plasticContentEncryptionPassword = "<the cloud content encryption password for your Plastic server / Plastic Cloud organization>"
 
+$unityVersion = "<desired Unity version>"                       # for example "2018.2.5f1"
+
 $unityCredential = Get-Credential
 	< type in username and password for the Unity ID account >
 
@@ -142,7 +144,7 @@ $targetSession = New-PSSession-GoogleCloudHost -TargetIp $targetIp -Credential $
 Activate-Plastic -TargetSession $targetSession -PlasticCredential $plasticCredential -PlasticServer $plasticServer -PlasticCloudContentEncryptionPassword $plasticContentEncryptionPassword
 
 . .\Unity\Activate-Unity.ps1
-Activate-Unity -TargetSession $targetSession -UnityCredential $unityCredential -Serial $unitySerial
+Activate-Unity -TargetSession $targetSession -Version $unityVersion -UnityCredential $unityCredential -Serial $unitySerial
 
 . .\JenkinsAgent\Activate-JenkinsSlave.ps1 
 Activate-JenkinsSlave -TargetSession $targetSession -JenkinsMasterUrl $jenkinsMasterUrl -NodeName $hostName -Credential $machineCredential -JenkinsMasterUser $jenkinsMasterUser -JenkinsMasterAPIToken $jenkinsMasterAPIToken

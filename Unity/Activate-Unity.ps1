@@ -3,15 +3,16 @@ function Activate-Unity {
 
 	param (
 		[Parameter(Mandatory=$true)][System.Management.Automation.Runspaces.PSSession]$TargetSession,
+		[Parameter(Mandatory=$true)][string]$Version,
 		[Parameter(Mandatory=$true)][System.Management.Automation.PSCredential]$UnityCredential,
 		[Parameter(Mandatory=$true)][string]$Serial
 	)
 
 	$installBaseDir = "C:\Program Files"
-	$unityVersionName = "Unity 2018.2.5f1"
+	$unityVersionName = "Unity {0}" -f $Version
 
 	$applicationRegistryKey = "HKCU:\Software\Unity Technologies\Installer\Unity"
-	$applicationRegistryVersion = "2018.2.5f1"
+	$applicationRegistryVersion = $Version
 
 	# Fail if the exact version of Unity is not found on the machine
 
