@@ -20,6 +20,8 @@ function Activate-Plastic {
 	$plasticUserName = ($PlasticCredential).UserName
 	$plasticPassword = ($PlasticCredential).GetNetworkCredential().Password
 
+	$configSourceFolder = "PlasticCloudClientConfig"
+
 	# Encrypt passwords
 	
 	# TODO: find a way to run the 'cm crypt' command on the target machine, without requiring the cm client to have been correctly configured beforehand
@@ -50,7 +52,7 @@ function Activate-Plastic {
 	$clientConfTempFileName = "client.temp.conf"
 	$clientConfTempLocation = (Join-Path -Path $PSScriptRoot -ChildPath $clientConfTempFileName)
 	
-	$clientConfXml = [xml] (Get-Content (Join-Path -Path $PSScriptRoot -ChildPath $clientConfFileName))
+	$clientConfXml = [xml] (Get-Content ([IO.Path]::Combine($PSScriptRoot, $configSourceFolder, $clientConfFileName)))
 	$clientConfXml.ClientConfigData.WorkspaceServer = $PlasticServer
 	$clientConfXml.ClientConfigData.SecurityConfig = $plasticCredentialString
 	
@@ -68,7 +70,7 @@ function Activate-Plastic {
 	$profilesConfTempFileName = "profiles.temp.conf"
 	$profilesConfTempLocation = (Join-Path -Path $PSScriptRoot -ChildPath $profilesConfTempFileName)
 	
-	$profilesConfXml = [xml] (Get-Content $profilesConfFileName)
+	$profilesConfXml = [xml] (Get-Content ([IO.Path]::Combine($PSScriptRoot, $configSourceFolder, $profilesConfFileName)))
 	$profilesConfXml.ServerProfileData.Profiles.ServerProfile.Name = $PlasticServer
 	$profilesConfXml.ServerProfileData.Profiles.ServerProfile.Server = $PlasticServer
 	$profilesConfXml.ServerProfileData.Profiles.ServerProfile.SecurityConfig = $plasticCredentialString
