@@ -5,7 +5,7 @@ function Install-Java {
 		[Parameter(Mandatory=$true)][System.Management.Automation.Runspaces.PSSession]$TargetSession
 	)
 
-	$jreDownloadUrl = "http://download.oracle.com/otn-pub/java/jdk/8u181-b13/96a7b8442fe848ef90c96a2fad6ed6d1/jre-8u181-windows-x64.exe"
+	$jreDownloadUrl = "http://download.oracle.com/otn-pub/java/jdk/8u192-b12/750e1c8617c5452694857ad95c3ee230/jre-8u192-windows-x64.exe"
 	
 	$applicationRegistryKey = "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\{26A24AE4-039D-4CA4-87B4-2F64180181F0}"
 
