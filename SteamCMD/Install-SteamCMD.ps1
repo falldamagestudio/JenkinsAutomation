@@ -37,7 +37,7 @@ function Install-SteamCMD {
 
 		# Add installation folder to Path
 
-		. .\Add-Path.ps1
+		. (Join-Path -Path $PSScriptRoot -ChildPath "..\Helpers\Add-Path.ps1")
 		Add-Path -TargetSession $TargetSession -Path $installDir
 		
 		# Run SteamCMD once, to force updating to latest version

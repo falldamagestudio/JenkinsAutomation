@@ -85,7 +85,7 @@ function Install-Plastic {
 		$plasticClientInstallDir = Join-Path -Path $plasticInstallDir -ChildPath "Client"
 		$plasticServerInstallDir = Join-Path -Path $plasticInstallDir -ChildPath "Server"
 
-		. .\Add-Path.ps1
+		. (Join-Path -Path $PSScriptRoot -ChildPath "..\Helpers\Add-Path.ps1")
 		Add-Path -TargetSession $targetSession -Path $plasticClientInstallDir
 		Add-Path -TargetSession $targetSession -Path $plasticServerInstallDir
 	}
