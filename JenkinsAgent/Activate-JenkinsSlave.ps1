@@ -10,6 +10,8 @@ function Activate-JenkinsSlave {
 		[Parameter(Mandatory=$true)][string]$JenkinsMasterAPIToken
 	)
 
+	$workDir = "c:\Jenkins"
+	
 	# Add node to master
 
 	echo "Adding Jenkins node to master..."
@@ -19,6 +21,7 @@ function Activate-JenkinsSlave {
 	$jenkinsSlaveConfig = [xml] (Get-Content (Join-Path -Path $PSScriptRoot -ChildPath $jenkinsSlaveConfigLocation))
 	$jenkinsSlaveConfig.slave.description = $NodeName
 	$jenkinsSlaveConfig.slave.label = $NodeName
+	$jenkinsSlaveConfig.slave.remoteFS = $workDir
 
 	$jenkinsCliFileName = "jenkins-cli.jar"
 	$jenkinsCliLocation = (Join-Path -Path $PSScriptRoot -ChildPath $jenkinsCliFileName)
@@ -74,8 +77,12 @@ function Activate-JenkinsSlave {
 		$env:JENKINS_SLAVE_SECRET = $using:agentSecret
 		[Environment]::SetEnvironmentVariable("JENKINS_SLAVE_SECRET", $env:JENKINS_SLAVE_SECRET, [EnvironmentVariableTarget]::Machine)
 
-		$env:JENKINS_SLAVE_WORK_DIR = $using:installDir
+		$env:JENKINS_SLAVE_WORK_DIR = $using:workDir
 		[Environment]::SetEnvironmentVariable("JENKINS_SLAVE_WORK_DIR", $env:JENKINS_SLAVE_WORK_DIR, [EnvironmentVariableTarget]::Machine)
+
+		# Create work dir if it doesn't yet exist
+
+		md -Force -Path $using:workDir | Out-Null
 		
 		# Install service
 		Start-Process -FilePath $using:targetNssmLocation -ArgumentList "install","""$using:jenkinsServiceName""","java.exe","%JENKINS_JVM_LAUNCH_ARGS%","-jar","""$using:slaveJarLocation""","-jnlpUrl","%JENKINS_MASTER_JNLP_URL%","-secret","%JENKINS_SLAVE_SECRET%","-workDir","%JENKINS_SLAVE_WORK_DIR%" -Wait

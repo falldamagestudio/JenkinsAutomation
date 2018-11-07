@@ -1,6 +1,6 @@
 <slave>
   <description>-- Will be replaced with $NodeName --</description>
-  <remoteFS>C:\Jenkins</remoteFS>
+  <remoteFS>-- Will be replaced with $workDir --</remoteFS>
   <numExecutors>1</numExecutors>
   <mode>EXCLUSIVE</mode>
   <retentionStrategy class="hudson.slaves.RetentionStrategy$Always"/>
